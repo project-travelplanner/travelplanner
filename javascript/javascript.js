@@ -213,6 +213,8 @@
   $(document).on('click', '.newusersignup', newusersignup);
   $(document).on('click', '.openmodnt', ntmodal);
   $(document).on('click', '.opennewdest', ndmodal);
+  $(document).on('click', '#returningusersubmit', returningusersubmit);
+  $(document).on('click', '.returninguserlogin', returninguserlogin);
 
 // base eventbrite API
   // $.ajax({
@@ -255,3 +257,40 @@
   //   }
   // }).done(function(response){
   //   console.log(response)
+
+  //Returning User Login
+    function returninguserlogin(event){
+      event.preventDefault()
+      console.log('clicked')
+      $('#returningusermodal').show()
+    }
+    $('.close').on('click', function(event){
+      event.preventDefault()
+      $('#returningusermodal').hide()
+    })
+
+  //Returning User Login
+    // function returningusersubmit(){
+    //   var returninguserEmail = $('#returninguseremail').val().trim()
+    //   var returninguserPassword = $('#newuserpw').val().trim()
+    //   var confirmPassword = $('#returninguserpw').val().trim()
+    //     if(returninguserPassword === returninguserPassword){
+    // firebase.auth().signInWithEmailAndPassword(email, password)
+    //     .catch(function(error) {
+    //   // Handle Errors here.
+    //   var errorCode = error.code;
+    //   var errorMessage = error.message;
+    //   if (errorCode === 'auth/wrong-password') {
+    //     alert('Wrong password.');
+    //   } else {
+    //     alert(errorMessage);
+    //   }
+    //   console.log(error);
+    // });
+
+    //Sign Out
+    // firebase.auth().signOut().then(function() {
+    //   console.log('Signed Out');
+    // }, .catch(function(error) {
+    //   console.error('Sign Out Error', error);
+    // });
