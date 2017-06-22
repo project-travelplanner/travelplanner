@@ -256,6 +256,10 @@ label{
     margin-top: 15px;
     margin: 5px;
     background-color: #EF233C;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #EDF2F4;
+    border-radius: 5px;
   }
 
   .pushright {
@@ -319,15 +323,26 @@ label{
   margin-top: 5px;
   width: 100%;
 }
+
 .destcomment {
   margin: 5px;
   width: 100%;
 }
+
 .destarrival{
   float: left;
-  margin-left: 30%;
+  /*margin-left: 25%;*/
+  width:25%;
 }
+
 .destdepart{
   float: left;
-  margin-left: 32%;
+  /*margin-left: 10%;*/
+  width:25%;
+}
+
+.destlocation{
+  /*margin-left: 10%;*/
+  margin-top: 15px;
+  width:25%;
 }
