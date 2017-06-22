@@ -254,13 +254,14 @@ label{
   }
   .opennewdest{
     margin-top: 15px;
-    margin-right: 3%;
-  }
+    margin: 5px;
+    background-color: #EF233C;
   }
 
   .pushright {
     margin-left: 11px;
   }
+
   #newdestmodal {
     top: 5%;
   }
