@@ -178,6 +178,7 @@ if(user_password === confirm_password){
       var mapsdepart = $(this).context.previousSibling.previousElementSibling.innerText
       // Get and add Lat/Long
       evBriteLookUp(mapsarrive, mapsdepart, mapslocation, $(this))
+      google.maps.event.trigger(map, 'resize')
       // initMap()
     }
 
@@ -187,17 +188,17 @@ if(user_password === confirm_password){
     if (user) {
       console.log("---------auth state change-----------");
       userid = user.uid
-      localStorage.setItem("userid", user.uid)
+      sessionStorage.setItem("userid", user.uid)
       $('.loginbutton').hide()
     }
-    if (page === "index"){
-      initMap()
-    }
+    // if (page === "index"){
+    //   initMap()
+    // }
   });
 
 // My Trips
   $(document).on('ready', function(){
-    userid = localStorage.getItem('userid')
+    userid = sessionStorage.getItem('userid')
     if(page === "mytrips"){
       var tripsref = database.ref('users/' + userid + '/trips').orderByChild("created")
       console.log('On mytrips page')
@@ -235,7 +236,9 @@ if(user_password === confirm_password){
             .addClass("opennewdest")
             .appendTo($('#destlist' + tripnum))
           var desttemp = value.dests
+          console.log(desttemp)
           desttemp = $.map( desttemp, function(key){
+            console.log(key)
             var destnum = $('.destdrop' + tripnum)["0"].children.length
             var dname = key.destName
             var dcomm = key.destComm
@@ -294,16 +297,22 @@ if(user_password === confirm_password){
           'start_date.range_start': arrive,
           'start_date.range_end': dept,
           'include_all_series_instances': false,
-          'include_unavailable_events': false
+          'include_unavailable_events': false,
         }
       }).done(function(response){
         if (response.events.length === 0){
           console.log('no results')
           $(thisbutton).text("Sorry, no shows available for those dates!")
         } else {
+          initMap()
+          eventmap = $('#map')
           console.log('some results')
-          debugger;
-          tempid = response.events[0].venue_id
+          for ( var i = 0; i < 5; i++){
+            tempid = response.events[i].venue_id
+            function makeMarkers (tempid) {
+
+            }
+            console.log(tempid)
             $.ajax({
               url: 'https://www.eventbriteapi.com/v3/venues/' + tempid + '/',
               method: 'GET',
@@ -314,12 +323,18 @@ if(user_password === confirm_password){
               debugger;
               tempaddress = response.address.localized_address_display
               var tempname = response.name
-              initMap()
+              var templat = Number(response.latitude)
+              var templong = Number(response.longitude)
               $('#mapmodal').show()
-              geocodeAddress(tempaddress, map)
-
-
+              google.maps.event.trigger(map, 'resize')
+              map.setCenter({lat: templat, lng: templong})
+              // geocodeAddress(tempaddress, map)
+              var marker = new google.maps.Marker({
+                map: map,
+                position:{lat: templat, lng: templong}
+              })
             })
+          }
         }
       })
     }
@@ -338,28 +353,27 @@ if(user_password === confirm_password){
   // $(document).on('click', '#logout', )
 
   // Returning User Login
-  //   function returningusersubmit(){
-  //     var returninguserEmail = $('#returninguseremail').val().trim()
-  //     var returninguserPassword = $('#newuserpw').val().trim()
-  //     var confirmPassword = $('#returninguserpw').val().trim()
-  //       if(returninguserPassword === returninguserPassword){
-  //   firebase.auth().signInWithEmailAndPassword(email, password)
-  //       .catch(function(error) {
-  //     // Handle Errors here.
-  //     var errorCode = error.code;
-  //     var errorMessage = error.message;
-  //     if (errorCode === 'auth/wrong-password') {
-  //       alert('Wrong password.');
-  //     } else {
-  //       alert(errorMessage);
-  //     }
-  //     console.log(error);
-  //   });
+    function returningusersubmit(){
+      var returninguserEmail = $('#returninguseremail').val().trim()
+      var returninguserPassword = $('#returninguserpw').val().trim()
+        firebase.auth().signInWithEmailAndPassword(returninguserEmail, returninguserPassword).catch(function(error){
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+            console.log(error);
+          }
+        })
+      $('#returningusermodal').hide()
+    };
 
-  //   Sign Out
-  //   firebase.auth().signOut().then(function() {
-  //     console.log('Signed Out');
-  //   }, .catch(function(error) {
-  //     console.error('Sign Out Error', error);
-  //   });
+    // // Sign Out
+    // firebase.auth().signOut().then(function() {
+    //   console.log('Signed Out');
+    // }).catch(function(error) {
+    //   console.error('Sign Out Error', error);
+    // });
 
