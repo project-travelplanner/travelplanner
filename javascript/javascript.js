@@ -1,7 +1,9 @@
-var database = firebase.database();
-
-var user_email = ""
-var user_password = ""
+// Variables
+  var database = firebase.database()
+  var venueid = ''
+  var userid
+  var dataref = database.ref('users/' + userid + '/data')
+  var totaltripcounter
 
 
 $('#user-sign-up').on('click', function(){
@@ -23,12 +25,48 @@ if(user_password === confirm_password){
     });
 }
 })
-// Variables
-  var database = firebase.database()
-  var venueid = ''
-  var userid
-  var dataref = database.ref('users/' + userid + '/data')
-  var totaltripcounter
+
+// API Functions
+
+  // Eventbrite API
+    function evBriteLookUp(arrive, dept, loc, button){
+      var thisbutton = button
+      $.ajax({
+        url: 'https://www.eventbriteapi.com/v3/events/search/',
+        method: 'GET',
+        data: {
+          token: '75JDM6P6R2M2PFYEECJ3',
+          categories: '103',
+          sort_by: '-distance',
+          'location.address': loc,
+          'start_date.range_start': arrive,
+          'start_date.range_end': dept,
+          'include_all_series_instances': false,
+          'include_unavailable_events': false
+        }
+      }).done(function(response){
+        if (response.events.length === 0){
+          console.log('no results')
+          $(thisbutton).text("Sorry, no shows available for those dates!")
+        } else {
+          console.log('some results')
+          debugger;
+          tempid = response.events[0].venue_id
+            $.ajax({
+              url: 'https://www.eventbriteapi.com/v3/venues/' + tempid + '/',
+              method: 'GET',
+              data: {
+                token: '75JDM6P6R2M2PFYEECJ3'
+              }
+            }).done(function(response){
+              debugger;
+              var tempaddress = response.address.localized_address_display
+              var tempname = response.name
+
+            })
+        }
+      })
+    }
 
 // On-Click Functions
   // New Trip Submit
@@ -190,45 +228,3 @@ if(user_password === confirm_password){
   $(document).on('click', '.newusersignup', newusersignup);
   $(document).on('click', '.openmodnt', ntmodal);
   $(document).on('click', '.opennewdest', ndmodal);
-
-// base eventbrite API
-  // $.ajax({
-  //   url: 'https://www.eventbriteapi.com/v3/events/search/',
-  //   method: 'GET',
-  //   data: {
-  //     token: '75JDM6P6R2M2PFYEECJ3',
-  //     categories: '103',
-  //     sort_by: '-distance',
-  //     'location.address': 'San Francisco, CA'
-  //   }
-  // }).done(function(response){
-  //     console.log(response)
-  //     for (var i = 0; i < response.length; i++){
-  //         var namePrint = response.events[i].name.text
-  //         var idPrint = response.events[i].venue_id
-  //           $.ajax({
-  //             url: 'https://www.eventbriteapi.com/v3/venues/' + idPrint + '/',
-  //             method: 'GET',
-  //             data: {
-  //               token: '75JDM6P6R2M2PFYEECJ3'
-  //             }
-  //           }).done(function(response){
-  //             var venueName = response.name
-  //             // console.log('--------Event ' + i + ' -----------')
-  //             console.log('Event Name = ' + namePrint)
-  //             console.log('venue_id = ' + idPrint)
-  //             console.log('Venue Name = ' + venueName)
-  //           })
-
-  //       };
-  // })
-
-//eventbrite venue API
-  // $.ajax({
-  //   url: 'https://www.eventbriteapi.com/v3/venues/19770605/',
-  //   method: 'GET',
-  //   data: {
-  //     token: '75JDM6P6R2M2PFYEECJ3'
-  //   }
-  // }).done(function(response){
-  //   console.log(response)
