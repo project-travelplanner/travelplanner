@@ -275,7 +275,6 @@
               debugger;
               var tempaddress = response.address.localized_address_display
               var tempname = response.name
-
             })
         }
       })
