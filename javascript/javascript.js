@@ -26,47 +26,6 @@ if(user_password === confirm_password){
 }
 })
 
-// API Functions
-
-  // Eventbrite API
-    function evBriteLookUp(arrive, dept, loc, button){
-      var thisbutton = button
-      $.ajax({
-        url: 'https://www.eventbriteapi.com/v3/events/search/',
-        method: 'GET',
-        data: {
-          token: '75JDM6P6R2M2PFYEECJ3',
-          categories: '103',
-          sort_by: '-distance',
-          'location.address': loc,
-          'start_date.range_start': arrive,
-          'start_date.range_end': dept,
-          'include_all_series_instances': false,
-          'include_unavailable_events': false
-        }
-      }).done(function(response){
-        if (response.events.length === 0){
-          console.log('no results')
-          $(thisbutton).text("Sorry, no shows available for those dates!")
-        } else {
-          console.log('some results')
-          debugger;
-          tempid = response.events[0].venue_id
-            $.ajax({
-              url: 'https://www.eventbriteapi.com/v3/venues/' + tempid + '/',
-              method: 'GET',
-              data: {
-                token: '75JDM6P6R2M2PFYEECJ3'
-              }
-            }).done(function(response){
-              debugger;
-              var tempaddress = response.address.localized_address_display
-              var tempname = response.name
-
-            })
-        }
-      })
-    }
 
 // On-Click Functions
   // New Trip Submit
@@ -220,6 +179,48 @@ if(user_password === confirm_password){
       console.log('run nothing, not on mytrips page')
     }
   })
+
+// API Functions
+
+  // Eventbrite API
+    function evBriteLookUp(arrive, dept, loc, button){
+      var thisbutton = button
+      $.ajax({
+        url: 'https://www.eventbriteapi.com/v3/events/search/',
+        method: 'GET',
+        data: {
+          token: '75JDM6P6R2M2PFYEECJ3',
+          categories: '103',
+          sort_by: '-distance',
+          'location.address': loc,
+          'start_date.range_start': arrive,
+          'start_date.range_end': dept,
+          'include_all_series_instances': false,
+          'include_unavailable_events': false
+        }
+      }).done(function(response){
+        if (response.events.length === 0){
+          console.log('no results')
+          $(thisbutton).text("Sorry, no shows available for those dates!")
+        } else {
+          console.log('some results')
+          debugger;
+          tempid = response.events[0].venue_id
+            $.ajax({
+              url: 'https://www.eventbriteapi.com/v3/venues/' + tempid + '/',
+              method: 'GET',
+              data: {
+                token: '75JDM6P6R2M2PFYEECJ3'
+              }
+            }).done(function(response){
+              debugger;
+              var tempaddress = response.address.localized_address_display
+              var tempname = response.name
+
+            })
+        }
+      })
+    }
 
 // On Click Listeners
   $(document).on('click', '#newusersubmit', newusersubmit);
