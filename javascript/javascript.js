@@ -29,7 +29,6 @@
   // New Trip Submit
     function newtripsubmit(event){
       var time = Date.now()
-      event.preventDefault()
       var newTripDesc = $('#newtripdescrip').val()
       tripName = $('#newtripname').val().trim()
       debugger;
@@ -86,6 +85,25 @@
         }
     }
 
+  // Returning User Login
+    function returninguserlogin(event){
+      event.preventDefault()
+      console.log('clicked')
+      $('#returningusermodal').show()
+    }
+    $('.close').on('click', function(event){
+      event.preventDefault()
+      $('#returningusermodal').hide()
+    })
+
+  // Close Trip Box
+    function closetrip(){
+      debugger;
+      var whichtrip = $(this).attr("data-num")
+      $('#' + whichtrip).hide()
+    }
+
+
 // Modal Functionality
   //New User
     function newusersignup(event){
@@ -117,6 +135,16 @@
         .attr("data-name", $(this).attr("data-name"))
     }
 
+  //Check Map
+    function showcheck(){
+      // modal.show()
+      var mapslocation = $(this).context.previousSibling.innerText
+      var mapsarrive = $(this).context.previousSibling.previousElementSibling.previousSibling.innerText
+      var mapsdepart = $(this).context.previousSibling.previousElementSibling.innerText
+      // Get and add Lat/Long
+      evBriteLookUp(mapsarrive, mapsdepart, mapslocation, $(this))
+    }
+
 // Firebase Listeners
   firebase.auth().onAuthStateChanged((user) => {
     debugger;
@@ -143,7 +171,7 @@
           var tripframe = $('<div class="tripitem tripitem' + tripnum + '">')
           var tname = $('<h1 class="tripname tripname' + tripnum + '">')
           var tdescrip = $('<p class="tripdescrip tripdescrip' + tripnum + '">')
-          var closebtn = $('<span class="glyphicon glyphicon-remove-circle tripclose tripclose' + tripnum + '" data-toggle="collapse" data-target="#destinfo">')
+          var closebtn = $('<span class="glyphicon glyphicon-remove-circle tripclose" data-num="' + tripnum + '" data-toggle="collapse" data-target="#destinfo">')
           var expandbtn = $('<a class="glyphicon glyphicon-chevron-down tripexpand" data-toggle="collapse" data-target="#destlist' + tripnum +'"></a>')
           var destlist = $('<div class="collapse destdrop destdrop' + tripnum + '">')
           var newdestbtn = $('<button  class="glyphicon glyphicon-plus opennewdest' + tripnum + '"></button>')
@@ -180,7 +208,7 @@
             var destarrival = $('<div class="destarrival">')
             var destdepart = $('<div class="destdepart">')
             var destlocation = $('<div class="destlocation">')
-            debugger;
+            var showcheckbtn = $('<button>')
             destframe
               .appendTo($('#destlist' + tripnum))
             destname
@@ -198,6 +226,10 @@
             destlocation
               .text(dloc)
               .appendTo($('#destframe' + destnum + '-' + tripnum))
+            showcheckbtn
+              .addClass('showlookup')
+              .text('Click to see shows near your Destination')
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
           })
         })
       })
@@ -206,7 +238,37 @@
     }
   })
 
+// API Functions
+
+  // Eventbrite API
+    function evBriteLookUp(arrive, dept, loc, button){
+      debugger;
+      var thisbutton = button
+      $.ajax({
+        url: 'https://www.eventbriteapi.com/v3/events/search/',
+        method: 'GET',
+        data: {
+          token: '75JDM6P6R2M2PFYEECJ3',
+          categories: '103',
+          sort_by: '-distance',
+          'location.address': loc,
+          'start_date.range_start': arrive,
+          'start_date.range_end': dept,
+          'include_all_series_instances': false,
+          'include_unavailable_events': false
+        }
+      }).done(function(response){
+        if (response.events.length === 0){
+          (console.log('no results'))
+
+        }
+        debugger;
+      })
+    }
+
 // On Click Listeners
+  $(document).on('click', '.showlookup', showcheck);
+  $(document).on('click', '.tripclose', closetrip)
   $(document).on('click', '#newusersubmit', newusersubmit);
   $(document).on('click', '#newdestsubmit', newdestsubmit);
   $(document).on('click', '#newtripsubmit', newtripsubmit);
@@ -215,6 +277,7 @@
   $(document).on('click', '.opennewdest', ndmodal);
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
+
 
 // base eventbrite API
   // $.ajax({
@@ -258,39 +321,30 @@
   // }).done(function(response){
   //   console.log(response)
 
-  //Returning User Login
-    function returninguserlogin(event){
-      event.preventDefault()
-      console.log('clicked')
-      $('#returningusermodal').show()
-    }
-    $('.close').on('click', function(event){
-      event.preventDefault()
-      $('#returningusermodal').hide()
-    })
 
-  //Returning User Login
-    // function returningusersubmit(){
-    //   var returninguserEmail = $('#returninguseremail').val().trim()
-    //   var returninguserPassword = $('#newuserpw').val().trim()
-    //   var confirmPassword = $('#returninguserpw').val().trim()
-    //     if(returninguserPassword === returninguserPassword){
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //     .catch(function(error) {
-    //   // Handle Errors here.
-    //   var errorCode = error.code;
-    //   var errorMessage = error.message;
-    //   if (errorCode === 'auth/wrong-password') {
-    //     alert('Wrong password.');
-    //   } else {
-    //     alert(errorMessage);
-    //   }
-    //   console.log(error);
-    // });
 
-    //Sign Out
-    // firebase.auth().signOut().then(function() {
-    //   console.log('Signed Out');
-    // }, .catch(function(error) {
-    //   console.error('Sign Out Error', error);
-    // });
+  // Returning User Login
+  //   function returningusersubmit(){
+  //     var returninguserEmail = $('#returninguseremail').val().trim()
+  //     var returninguserPassword = $('#newuserpw').val().trim()
+  //     var confirmPassword = $('#returninguserpw').val().trim()
+  //       if(returninguserPassword === returninguserPassword){
+  //   firebase.auth().signInWithEmailAndPassword(email, password)
+  //       .catch(function(error) {
+  //     // Handle Errors here.
+  //     var errorCode = error.code;
+  //     var errorMessage = error.message;
+  //     if (errorCode === 'auth/wrong-password') {
+  //       alert('Wrong password.');
+  //     } else {
+  //       alert(errorMessage);
+  //     }
+  //     console.log(error);
+  //   });
+
+  //   Sign Out
+  //   firebase.auth().signOut().then(function() {
+  //     console.log('Signed Out');
+  //   }, .catch(function(error) {
+  //     console.error('Sign Out Error', error);
+  //   });
