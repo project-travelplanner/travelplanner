@@ -103,6 +103,7 @@
       $('#' + whichtrip).hide()
     }
 
+
 // Modal Functionality
   //New User
     function newusersignup(event){
@@ -136,8 +137,14 @@
 
   //Check Map
     function showcheck(){
-      debugger;
+      // modal.show()
+      var mapslocation = $(this).context.previousSibling.innerText
+      var mapsarrive = $(this).context.previousSibling.previousElementSibling.previousSibling.innerText
+      var mapsdepart = $(this).context.previousSibling.previousElementSibling.innerText
+      // Get and add Lat/Long
+      evBriteLookUp(mapsarrive, mapsdepart, mapslocation, $(this))
     }
+
 // Firebase Listeners
   firebase.auth().onAuthStateChanged((user) => {
     debugger;
@@ -202,7 +209,6 @@
             var destdepart = $('<div class="destdepart">')
             var destlocation = $('<div class="destlocation">')
             var showcheckbtn = $('<button>')
-            debugger;
             destframe
               .appendTo($('#destlist' + tripnum))
             destname
@@ -232,7 +238,36 @@
     }
   })
 
+// API Functions
+
+  // Eventbrite API
+    function evBriteLookUp(arrive, dept, loc, button){
+      debugger;
+      var thisbutton = button
+      $.ajax({
+        url: 'https://www.eventbriteapi.com/v3/events/search/',
+        method: 'GET',
+        data: {
+          token: '75JDM6P6R2M2PFYEECJ3',
+          categories: '103',
+          sort_by: '-distance',
+          'location.address': loc,
+          'start_date.range_start': arrive,
+          'start_date.range_end': dept,
+          'include_all_series_instances': false,
+          'include_unavailable_events': false
+        }
+      }).done(function(response){
+        if (response.events.length === 0){
+          (console.log('no results'))
+
+        }
+        debugger;
+      })
+    }
+
 // On Click Listeners
+  $(document).on('click', '.showlookup', showcheck);
   $(document).on('click', '.tripclose', closetrip)
   $(document).on('click', '#newusersubmit', newusersubmit);
   $(document).on('click', '#newdestsubmit', newdestsubmit);
@@ -242,7 +277,7 @@
   $(document).on('click', '.opennewdest', ndmodal);
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
-  $(document).on('click', '.showlookup', showcheck);
+
 
 // base eventbrite API
   // $.ajax({
@@ -288,28 +323,28 @@
 
 
 
-  //Returning User Login
-    // function returningusersubmit(){
-    //   var returninguserEmail = $('#returninguseremail').val().trim()
-    //   var returninguserPassword = $('#newuserpw').val().trim()
-    //   var confirmPassword = $('#returninguserpw').val().trim()
-    //     if(returninguserPassword === returninguserPassword){
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //     .catch(function(error) {
-    //   // Handle Errors here.
-    //   var errorCode = error.code;
-    //   var errorMessage = error.message;
-    //   if (errorCode === 'auth/wrong-password') {
-    //     alert('Wrong password.');
-    //   } else {
-    //     alert(errorMessage);
-    //   }
-    //   console.log(error);
-    // });
+  // Returning User Login
+  //   function returningusersubmit(){
+  //     var returninguserEmail = $('#returninguseremail').val().trim()
+  //     var returninguserPassword = $('#newuserpw').val().trim()
+  //     var confirmPassword = $('#returninguserpw').val().trim()
+  //       if(returninguserPassword === returninguserPassword){
+  //   firebase.auth().signInWithEmailAndPassword(email, password)
+  //       .catch(function(error) {
+  //     // Handle Errors here.
+  //     var errorCode = error.code;
+  //     var errorMessage = error.message;
+  //     if (errorCode === 'auth/wrong-password') {
+  //       alert('Wrong password.');
+  //     } else {
+  //       alert(errorMessage);
+  //     }
+  //     console.log(error);
+  //   });
 
-    //Sign Out
-    // firebase.auth().signOut().then(function() {
-    //   console.log('Signed Out');
-    // }, .catch(function(error) {
-    //   console.error('Sign Out Error', error);
-    // });
+  //   Sign Out
+  //   firebase.auth().signOut().then(function() {
+  //     console.log('Signed Out');
+  //   }, .catch(function(error) {
+  //     console.error('Sign Out Error', error);
+  //   });
