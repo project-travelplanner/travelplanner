@@ -275,7 +275,20 @@ if(user_password === confirm_password){
               debugger;
               var tempaddress = response.address.localized_address_display
               var tempname = response.name
-
+              // function geocodeAddress(geocoder, resultsMap) {
+              //   var address = document.getElementById('address').value;
+              //   geocoder.geocode({'address': tempaddress}, function(results, status) {
+              //     if (status === 'OK') {
+              //       resultsMap.setCenter(results[0].geometry.location);
+              //       var marker = new google.maps.Marker({
+              //         map: resultsMap,
+              //         position: results[0].geometry.location
+              //       });
+              //     } else {
+              //       alert('Geocode was not successful for the following reason: ' + status);
+              //     }
+              //   });
+              // }
             })
         }
       })
@@ -293,7 +306,6 @@ if(user_password === confirm_password){
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
   // $(document).on('click', '#logout', )
-
 
   // Returning User Login
   //   function returningusersubmit(){

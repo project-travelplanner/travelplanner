@@ -352,3 +352,10 @@ label{
   color: #EDF2F4;
   font-family: 'Crushed', cursive;
 }
+
+#map {
+  
+  height: 400px;
+  width: 60%;
+
+}
