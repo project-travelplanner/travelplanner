@@ -62,17 +62,6 @@
       </div>
 
     <div class="tripcontainer">
-      <!--
-        <div class="tripitem">
-            <span class="glyphicon glyphicon-remove-circle tripclose" data-toggle="collapse" data-target="#destinfo"></span>
-            <a class="glyphicon glyphicon-chevron-down tripexpand" data-toggle="collapse" data-target="#destlist"></a>
-            <h1 class="tripname">Southwest Roadtrip</h1>
-            <p class="tripdescrip">Going through Arizona, Texas, New Mexico, and Utah!</p>
-            <div class="collapse" id="destlist">
-              <p class="opennewdest" id="placeholderdest"> <span  class="glyphicon glyphicon-plus"></span> Click to add Destination </p>
-            </div>
-        </div>
-      -->
     </div>
   <!-- New Trip Modal -->
     <div id="newtripmodal" class="modal">
@@ -120,6 +109,13 @@
           </form>
       </div>
     </div>
+
+  <!-- Check Shows Modal -->
+    <div id="mapmodal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+      </div>
+    </div>
   <!-- FOOTER -->
     <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
@@ -148,6 +144,7 @@
         messagingSenderId: "593100455307"
       };
       firebase.initializeApp(config);
+      var page = "mytrips"
     </script>
     <!-- Bootstrap core JavaScript
     ================================================== -->

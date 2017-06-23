@@ -5,7 +5,6 @@
   var dataref = database.ref('users/' + userid + '/data')
   var totaltripcounter
 
-
 $('#user-sign-up').on('click', function(){
 var user_email = $('#user-email').val().trim();
 var user_password = $('#password-input').val().trim();
@@ -26,12 +25,10 @@ if(user_password === confirm_password){
 }
 })
 
-
 // On-Click Functions
   // New Trip Submit
     function newtripsubmit(event){
       var time = Date.now()
-      event.preventDefault()
       var newTripDesc = $('#newtripdescrip').val()
       tripName = $('#newtripname').val().trim()
       debugger;
@@ -45,11 +42,10 @@ if(user_password === confirm_password){
       $('#newtripmodal').hide()
     }
 
-
-
   // New Destination Submit
     function newdestsubmit(event){
       event.preventDefault()
+      var time = Date.now()
       debugger;
       var tripName = $(this)["0"].offsetParent.offsetParent.attributes[2].value
       var newDestname = $('#newdestname').val().trim()
@@ -59,7 +55,6 @@ if(user_password === confirm_password){
       var newDestComm = $('#newdestcomm').val().trim()
       var currentTripCounter
       database.ref('users/' + userid + '/trips/' + tripName).once('value').then(function(snapshot){
-        console.log(snapshot.val().tripcounter)
         currentTripCounter = snapshot.val().tripcounter
       })
       database.ref('users/' + userid + '/trips/' + tripName + '/dests/' + newDestname).set({
@@ -67,7 +62,8 @@ if(user_password === confirm_password){
         destLoc: newDestLoc,
         destArr: newDestArr,
         destDept: newDestDept,
-        destComm: newDestComm
+        destComm: newDestComm,
+        destcreated: time
       })
       $('#newdestmodal').hide()
     }
@@ -89,6 +85,25 @@ if(user_password === confirm_password){
         }
     }
 
+  // Returning User Login
+    function returninguserlogin(event){
+      event.preventDefault()
+      console.log('clicked')
+      $('#returningusermodal').show()
+    }
+    $('.close').on('click', function(event){
+      event.preventDefault()
+      $('#returningusermodal').hide()
+    })
+
+  // Close Trip Box
+    function closetrip(){
+      debugger;
+      var whichtrip = $(this).attr("data-num")
+      $('#' + whichtrip).hide()
+    }
+
+
 // Modal Functionality
   //New User
     function newusersignup(event){
@@ -109,6 +124,7 @@ if(user_password === confirm_password){
       $('#newtripmodal')
         .show()
     }
+
   //New Destination
     function ndmodal(event){
       debugger;
@@ -119,60 +135,103 @@ if(user_password === confirm_password){
         .attr("data-name", $(this).attr("data-name"))
     }
 
+  //Check Map
+    function showcheck(){
+      // modal.show()
+      var mapslocation = $(this).context.previousSibling.innerText
+      var mapsarrive = $(this).context.previousSibling.previousElementSibling.previousSibling.innerText
+      var mapsdepart = $(this).context.previousSibling.previousElementSibling.innerText
+      // Get and add Lat/Long
+      evBriteLookUp(mapsarrive, mapsdepart, mapslocation, $(this))
+    }
+
 // Firebase Listeners
   firebase.auth().onAuthStateChanged((user) => {
+    debugger;
     if (user) {
       console.log("---------auth state change-----------");
       userid = user.uid
       localStorage.setItem("userid", user.uid)
-      // dataref.once('value').then(function(response){
-      //   localStorage.setItem("tripcounter", response.val())
-      // })
+      $('.loginbutton').hide()
     }
   });
 
 // My Trips
   $(document).on('ready', function(){
     userid = localStorage.getItem('userid')
-    if(window.location.pathname === '/travelplanner/mytrips.html' || window.location.pathname === "/C:/Users/Nate/Desktop/code/travelplannerfork/mytrips.html"){
+    if(page === "mytrips"){
       var tripsref = database.ref('users/' + userid + '/trips').orderByChild("created")
       console.log('On mytrips page')
       console.log('userid = ' + userid)
       tripsref.once('value', function(response){
-        var responseAsArray = Object.keys(response.val())
         var triptemp = response.val()
-        triptemp = $.map( triptemp, function( value, created ) {
-          debugger;
-          var containersize = $('.tripcontainer')["0"].children.length
+        triptemp = $.map( triptemp, function( value, created ) {                    // map 1
+          var tripnum = $('.tripcontainer')["0"].children.length
           var name = value.tripname
-          console.log(value)
           var mapObject = value
-          var tripframe = $('<div class="tripitem tripitem' + containersize + '">')
-          var tname = $('<h1 class="tripname tripname' + containersize + '">')
-          var tdescrip = $('<p class="tripdescrip tripdescrip' + containersize + '">')
-          var closebtn = $('<span class="glyphicon glyphicon-remove-circle tripclose tripclose' + containersize + '" data-toggle="collapse" data-target="#destinfo">')
-          var expandbtn = $('<a class="glyphicon glyphicon-chevron-down tripexpand" data-toggle="collapse" data-target="#destlist' + containersize +'"></a>')
-          var destlist = $('<div class="collapse destdrop destdrop' + containersize + '">')
-          var newdestbtn = $('<button  class="glyphicon glyphicon-plus opennewdest' + containersize + '"></button>')
+          var tripframe = $('<div class="tripitem tripitem' + tripnum + '">')
+          var tname = $('<h1 class="tripname tripname' + tripnum + '">')
+          var tdescrip = $('<p class="tripdescrip tripdescrip' + tripnum + '">')
+          var closebtn = $('<span class="glyphicon glyphicon-remove-circle tripclose" data-num="' + tripnum + '" data-toggle="collapse" data-target="#destinfo">')
+          var expandbtn = $('<a class="glyphicon glyphicon-chevron-down tripexpand" data-toggle="collapse" data-target="#destlist' + tripnum +'"></a>')
+          var destlist = $('<div class="collapse destdrop destdrop' + tripnum + '">')
+          var newdestbtn = $('<button  class="glyphicon glyphicon-plus opennewdest' + tripnum + '"></button>')
           tripframe
-            .attr("id", containersize)
+            .attr("id", tripnum)
             .appendTo($('.tripcontainer'))
             .append(expandbtn)
             .append(closebtn)
           tname
             .text(mapObject.tripname)
-            .appendTo($('#' + containersize))
+            .appendTo($('#' + tripnum))
           tdescrip
             .text(mapObject.tripdesc)
-            .appendTo($('#' + containersize))
+            .appendTo($('#' + tripnum))
           destlist
-            .attr("id", "destlist" + containersize)
-            .appendTo($('.' + 'tripdescrip' + containersize))
+            .attr("id", "destlist" + tripnum)
+            .appendTo($('.' + 'tripdescrip' + tripnum))
           newdestbtn
-            .attr("data-number", containersize)
+            .attr("data-number", tripnum)
             .attr("data-name", name)
             .addClass("opennewdest")
-            .appendTo($('#destlist' + containersize))
+            .appendTo($('#destlist' + tripnum))
+          var desttemp = value.dests
+          desttemp = $.map( desttemp, function(key){
+            var destnum = $('.destdrop' + tripnum)["0"].children.length
+            var dname = key.destName
+            var dcomm = key.destComm
+            var darr = key.destArr
+            var ddept = key.destDept
+            var dloc = key.destLoc
+            var destframe = $('<div class="destframe" id="destframe' + destnum + '-' + tripnum + '">')
+            var destname = $('<div class="destname">')
+            var destcomment = $('<div class="destcomment">')
+            var destarrival = $('<div class="destarrival">')
+            var destdepart = $('<div class="destdepart">')
+            var destlocation = $('<div class="destlocation">')
+            var showcheckbtn = $('<button>')
+            destframe
+              .appendTo($('#destlist' + tripnum))
+            destname
+              .text(dname)
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
+            destcomment
+              .text(dcomm)
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
+            destarrival
+              .text(darr)
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
+            destdepart
+              .text(ddept)
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
+            destlocation
+              .text(dloc)
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
+            showcheckbtn
+              .addClass('showlookup')
+              .text('Click to see shows near your Destination')
+              .appendTo($('#destframe' + destnum + '-' + tripnum))
+          })
         })
       })
     } else {
@@ -223,9 +282,41 @@ if(user_password === confirm_password){
     }
 
 // On Click Listeners
+  $(document).on('click', '.showlookup', showcheck);
+  $(document).on('click', '.tripclose', closetrip)
   $(document).on('click', '#newusersubmit', newusersubmit);
   $(document).on('click', '#newdestsubmit', newdestsubmit);
   $(document).on('click', '#newtripsubmit', newtripsubmit);
   $(document).on('click', '.newusersignup', newusersignup);
   $(document).on('click', '.openmodnt', ntmodal);
   $(document).on('click', '.opennewdest', ndmodal);
+  $(document).on('click', '#returningusersubmit', returningusersubmit);
+  $(document).on('click', '.returninguserlogin', returninguserlogin);
+  // $(document).on('click', '#logout', )
+
+
+  // Returning User Login
+  //   function returningusersubmit(){
+  //     var returninguserEmail = $('#returninguseremail').val().trim()
+  //     var returninguserPassword = $('#newuserpw').val().trim()
+  //     var confirmPassword = $('#returninguserpw').val().trim()
+  //       if(returninguserPassword === returninguserPassword){
+  //   firebase.auth().signInWithEmailAndPassword(email, password)
+  //       .catch(function(error) {
+  //     // Handle Errors here.
+  //     var errorCode = error.code;
+  //     var errorMessage = error.message;
+  //     if (errorCode === 'auth/wrong-password') {
+  //       alert('Wrong password.');
+  //     } else {
+  //       alert(errorMessage);
+  //     }
+  //     console.log(error);
+  //   });
+
+  //   Sign Out
+  //   firebase.auth().signOut().then(function() {
+  //     console.log('Signed Out');
+  //   }, .catch(function(error) {
+  //     console.error('Sign Out Error', error);
+  //   });

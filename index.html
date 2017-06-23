@@ -27,13 +27,12 @@
              <a class="navbar-brand" href="index.html">NSN</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                  <ul class="nav navbar-nav">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="mytrips.html">My Trips</a></li>
-                    <li><a href="account.html">Account</a></li>
-                    <li class="dropdown">
-                  </ul>
-                </li>
+              <ul class="nav navbar-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="mytrips.html">My Trips</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li><a id="logout">Log Out</a></li>
+                <li class="dropdown"></li>
               </ul>
             </div>
           </div>
@@ -67,11 +66,11 @@
         <span class="close">&times;</span>
           <form class="modalform"> <!-- Adding a trip -->
             <label for="newuseremail" class="">Enter Email</label><br>
-            <input type="text" name="newuseremail" class="modalinput" id="newuseremail"><br>
+            <input type="email" name="newuseremail" class="modalinput" id="newuseremail"><br>
             <label for="newuserpw">Enter a password</label><br>
-            <input type="text" name="newuserpw" class="modalinput" id="newuserpw"><br>
+            <input type="password" name="newuserpw" class="modalinput" id="newuserpw"><br>
             <label for="newuserconfirm">Confirm your password</label><br>
-            <input type="text" name="newuserconfirm" class="modalinput" id="newuserconfirm"><br>
+            <input type="password" name="newuserconfirm" class="modalinput" id="newuserconfirm"><br>
             <input type="submit" id="newusersubmit">
             <p style="visibility:hidden" class="errormsg">Your passwords must match</p>
           </form>
@@ -79,18 +78,18 @@
 
     </div>
 
-    <div id="returninguser" class="modal">
+    <div id="returningusermodal" class="modal">
 
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
           <form class="modalform"> <!-- Adding a trip -->
             <label for="email" class="">Email</label><br>
-            <input type="text" name="returninguseremail" class="modalinput" id="returninguseremail"><br>
+            <input type="email" name="returninguseremail" class="modalinput" id="returninguseremail"><br>
             <label for="returninguserpw">Password</label><br>
-            <input type="text" name="returninguserpw" class="modalinput" id="returninguserpw"><br>
+            <input type="password" name="returninguserpw" class="modalinput" id="returninguserpw"><br>
             <input type="submit" id="returningusersubmit">
-            <p style="visibility:hidden" class="errormsg">Your passwords must match</p>
+            <p style="visibility:hidden" class="returningusererrormsg">Your email or password is incorrect. Please try again.</p>
           </form>
       </div>
 
@@ -125,7 +124,7 @@
       <div class="row featurette">
         <div class="col-md-6 col-md-push-6">
           <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <p class="lead">Local bands on the rise.</p>
         </div>
         <div class="col-md-6 col-md-pull-6">
           <img class="featurette-image img-responsive center-block" src="assets/dj2.jpeg" alt="Generic placeholder image">
@@ -137,61 +136,13 @@
       <div class="row featurette">
         <div class="col-md-7">
           <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <p class="lead">Find suitable bands performing in your area, enjoy live music, food, drinks, and take memorable photos.</p>
         </div>
         <div class="col-md-5">
           <img class="featurette-image img-responsive center-block" src="assets/keys.jpeg" alt="Generic placeholder image">
         </div>
       </div>
 
-      <hr class="featurette-divider">
-
-          <!-- Marketing messaging and featurettes
-          ================================================== -->
-          <!-- Wrap the rest of the page in another container to center all the content. -->
-
-      <div class="container marketing">
-
-        <!-- Three columns of text below the carousel -->
-        <div class="row">
-          <div class="col-lg-4">
-            <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-          <div class="col-lg-4">
-            <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-          <div class="col-lg-4">
-            <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-        </div><!-- /.row -->
-
-        <!-- /END THE FEATURETTES -->
-        <div class="row">
-          <div class="column-md-12">
-            <form> <!-- Adding a trip -->
-              <input type="text" name="newtripname" id="newtripname"><br>
-              <input type="text" name="newtripdescrip" id="newtripdescrip"><br>
-              <input type="submit" id="newtripsubmit">
-            </form><br>
-            <form> <!-- Adding a Destination -->
-              <input type="text" name="newdest" id="newdestname"> <!-- New Destination Name -->
-              <input type="text" name="newdestloc" id="newdestloc"> <!-- New Destination Location -->
-              <input type="text" name="newdestarr" id="newdestarr"> <!-- New Destination Arrival Date/Time -->
-              <input type="text" name="newdestdept" id="newdestdept"> <!-- New Destination Depature Date/Time -->
-              <input type="text" name="newdestcomm" id="newdestcomm"> <!-- New Destination Comments -->
-              <input type="submit" id="newdestsubmit">
-            </form>
-          </div>
-        </div>
 
         <!-- FOOTER -->
         <footer>
