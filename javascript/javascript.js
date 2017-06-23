@@ -275,8 +275,20 @@
               debugger;
               var tempaddress = response.address.localized_address_display
               var tempname = response.name
-
-              
+              // function geocodeAddress(geocoder, resultsMap) {
+              //   var address = document.getElementById('address').value;
+              //   geocoder.geocode({'address': tempaddress}, function(results, status) {
+              //     if (status === 'OK') {
+              //       resultsMap.setCenter(results[0].geometry.location);
+              //       var marker = new google.maps.Marker({
+              //         map: resultsMap,
+              //         position: results[0].geometry.location
+              //       });
+              //     } else {
+              //       alert('Geocode was not successful for the following reason: ' + status);
+              //     }
+              //   });
+              // }
             })
         }
       })
@@ -294,51 +306,6 @@
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
   // $(document).on('click', '#logout', )
-
-
-// base eventbrite API
-  // $.ajax({
-  //   url: 'https://www.eventbriteapi.com/v3/events/search/',
-  //   method: 'GET',
-  //   data: {
-  //     token: '75JDM6P6R2M2PFYEECJ3',
-  //     categories: '103',
-  //     sort_by: '-distance',
-  //     'location.address': 'San Francisco, CA'
-  //   }
-  // }).done(function(response){
-  //     console.log(response)
-  //     for (var i = 0; i < response.length; i++){
-  //         var namePrint = response.events[i].name.text
-  //         var idPrint = response.events[i].venue_id
-  //           $.ajax({
-  //             url: 'https://www.eventbriteapi.com/v3/venues/' + idPrint + '/',
-  //             method: 'GET',
-  //             data: {
-  //               token: '75JDM6P6R2M2PFYEECJ3'
-  //             }
-  //           }).done(function(response){
-  //             var venueName = response.name
-  //             // console.log('--------Event ' + i + ' -----------')
-  //             console.log('Event Name = ' + namePrint)
-  //             console.log('venue_id = ' + idPrint)
-  //             console.log('Venue Name = ' + venueName)
-  //           })
-
-  //       };
-  // })
-
-//eventbrite venue API
-  // $.ajax({
-  //   url: 'https://www.eventbriteapi.com/v3/venues/19770605/',
-  //   method: 'GET',
-  //   data: {
-  //     token: '75JDM6P6R2M2PFYEECJ3'
-  //   }
-  // }).done(function(response){
-  //   console.log(response)
-
-
 
   // Returning User Login
   //   function returningusersubmit(){
