@@ -346,3 +346,9 @@ label{
   margin-top: 15px;
   width:25%;
 }
+
+.showlookup {
+  background-color: #D80032;
+  color: #EDF2F4;
+  font-family: 'Crushed', cursive;
+}
