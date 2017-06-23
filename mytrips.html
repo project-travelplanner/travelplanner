@@ -152,14 +152,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script>
+      var map;
       function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
           zoom: 12,
           center: {lat: 37.7936684, lng: -122.3957547}
         });
+        console.log(map)
         var geocoder = new google.maps.Geocoder();
-          geocodeAddress(geocoder, map);
-        };
+      };
 
       // window.initMap = initMap;
 
@@ -169,6 +170,7 @@
         geocoder.geocode({'address': address}, function(results, status) {
           if (status === 'OK') {
             resultsMap.setCenter(results[0].geometry.location);
+            console.log(results[0].geometry.location)
             var marker = new google.maps.Marker({
               map: resultsMap,
               position: results[0].geometry.location

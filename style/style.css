@@ -352,9 +352,14 @@ label{
   font-family: 'Crushed', cursive;
 }
 
+#mapmodal{
+  position: fixed;
+  margin-top: -135px;
+  z-index: 3;
+  margin-left: -30px;
+  width: 520px;
+}
 #map {
-  
   height: 400px;
-  width: 60%;
-
+  width: 100%;
 }
