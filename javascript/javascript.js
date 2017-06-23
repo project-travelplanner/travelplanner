@@ -152,6 +152,7 @@
       console.log("---------auth state change-----------");
       userid = user.uid
       localStorage.setItem("userid", user.uid)
+      $('.loginbutton').hide()
     }
   });
 
@@ -242,7 +243,6 @@
 
   // Eventbrite API
     function evBriteLookUp(arrive, dept, loc, button){
-      debugger;
       var thisbutton = button
       $.ajax({
         url: 'https://www.eventbriteapi.com/v3/events/search/',
@@ -259,10 +259,25 @@
         }
       }).done(function(response){
         if (response.events.length === 0){
-          (console.log('no results'))
+          console.log('no results')
+          $(thisbutton).text("Sorry, no shows available for those dates!")
+        } else {
+          console.log('some results')
+          debugger;
+          tempid = response.events[0].venue_id
+            $.ajax({
+              url: 'https://www.eventbriteapi.com/v3/venues/' + tempid + '/',
+              method: 'GET',
+              data: {
+                token: '75JDM6P6R2M2PFYEECJ3'
+              }
+            }).done(function(response){
+              debugger;
+              var tempaddress = response.address.localized_address_display
+              var tempname = response.name
 
+            })
         }
-        debugger;
       })
     }
 
@@ -277,6 +292,7 @@
   $(document).on('click', '.opennewdest', ndmodal);
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
+  // $(document).on('click', '#logout', )
 
 
 // base eventbrite API
