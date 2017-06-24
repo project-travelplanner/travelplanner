@@ -64,7 +64,7 @@
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
-          <form class="modalform"> <!-- Adding a trip -->
+          <div class="modalform"> <!-- Adding a trip -->
             <label for="newuseremail" class="">Enter Email</label><br>
             <input type="email" name="newuseremail" class="modalinput" id="newuseremail"><br>
             <label for="newuserpw">Enter a password</label><br>
@@ -73,7 +73,7 @@
             <input type="password" name="newuserconfirm" class="modalinput" id="newuserconfirm"><br>
             <input type="submit" id="newusersubmit">
             <p style="visibility:hidden" class="errormsg">Your passwords must match</p>
-          </form>
+          </div>
       </div>
 
     </div>
@@ -83,14 +83,14 @@
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
-          <form class="modalform"> <!-- Adding a trip -->
+          <div class="modalform"> <!-- Adding a trip -->
             <label for="email" class="">Email</label><br>
             <input type="email" name="returninguseremail" class="modalinput" id="returninguseremail"><br>
             <label for="returninguserpw">Password</label><br>
             <input type="password" name="returninguserpw" class="modalinput" id="returninguserpw"><br>
             <input type="submit" id="returningusersubmit">
             <p style="visibility:hidden" class="returningusererrormsg">Your email or password is incorrect. Please try again.</p>
-          </form>
+          </div>
       </div>
 
     </div>
@@ -143,6 +143,12 @@
         </div>
       </div>
 
+      <div id="floating-panel">
+          <input id="address" type="textbox" value="San Francisco">
+          <input id="submit" type="button" value="Geocode">
+        </div>
+      <div id="map"></div>
+
 
         <!-- FOOTER -->
         <footer>
@@ -173,6 +179,7 @@
         messagingSenderId: "593100455307"
       };
       firebase.initializeApp(config);
+      var page = "index"
     </script>
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -182,5 +189,37 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript" src="javascript/javascript.js"></script>
 
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: {lat: 37.7936684, lng: -122.3957547}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+      }
+
+      // window.initMap = initMap;
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKgqILnUfcbks-G_f0KfFU-ENQ4fod09E&callback=initMap">
+    </script>
   </body>
 </html>
