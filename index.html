@@ -64,7 +64,7 @@
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
-          <form class="modalform"> <!-- Adding a trip -->
+          <div class="modalform"> <!-- Adding a trip -->
             <label for="newuseremail" class="">Enter Email</label><br>
             <input type="email" name="newuseremail" class="modalinput" id="newuseremail"><br>
             <label for="newuserpw">Enter a password</label><br>
@@ -73,7 +73,7 @@
             <input type="password" name="newuserconfirm" class="modalinput" id="newuserconfirm"><br>
             <input type="submit" id="newusersubmit">
             <p style="visibility:hidden" class="errormsg">Your passwords must match</p>
-          </form>
+          </div>
       </div>
 
     </div>
@@ -83,14 +83,14 @@
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
-          <form class="modalform"> <!-- Adding a trip -->
+          <div class="modalform"> <!-- Adding a trip -->
             <label for="email" class="">Email</label><br>
             <input type="email" name="returninguseremail" class="modalinput" id="returninguseremail"><br>
             <label for="returninguserpw">Password</label><br>
             <input type="password" name="returninguserpw" class="modalinput" id="returninguserpw"><br>
             <input type="submit" id="returningusersubmit">
             <p style="visibility:hidden" class="returningusererrormsg">Your email or password is incorrect. Please try again.</p>
-          </form>
+          </div>
       </div>
 
     </div>
@@ -147,7 +147,6 @@
           <input id="address" type="textbox" value="San Francisco">
           <input id="submit" type="button" value="Geocode">
         </div>
-    
       <div id="map"></div>
 
 
@@ -180,6 +179,7 @@
         messagingSenderId: "593100455307"
       };
       firebase.initializeApp(config);
+      var page = "index"
     </script>
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -221,6 +221,5 @@
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKgqILnUfcbks-G_f0KfFU-ENQ4fod09E&callback=initMap">
     </script>
-
   </body>
 </html>

@@ -4,6 +4,8 @@
   var userid
   var dataref = database.ref('users/' + userid + '/data')
   var totaltripcounter
+  var tempaddress
+  var geocoder
 
 $('#user-sign-up').on('click', function(){
 var user_email = $('#user-email').val().trim();
@@ -50,8 +52,12 @@ if(user_password === confirm_password){
       var tripName = $(this)["0"].offsetParent.offsetParent.attributes[2].value
       var newDestname = $('#newdestname').val().trim()
       var newDestLoc = $('#newdestloc').val().trim()
-      var newDestArr = $('#newdestarr').val().trim()
-      var newDestDept = $('#newdestdept').val().trim()
+      var newDestArry = $('#newdestarry').val().trim()
+      var newDestArrm = $('#newdestarrm').val().trim()
+      var newDestArrd = $('#newdestarrd').val().trim()
+      var newDestDepty = $('#newdestdepty').val().trim()
+      var newDestDeptm = $('#newdestdeptm').val().trim()
+      var newDestDeptd = $('#newdestdeptd').val().trim()
       var newDestComm = $('#newdestcomm').val().trim()
       var currentTripCounter
       database.ref('users/' + userid + '/trips/' + tripName).once('value').then(function(snapshot){
@@ -60,8 +66,8 @@ if(user_password === confirm_password){
       database.ref('users/' + userid + '/trips/' + tripName + '/dests/' + newDestname).set({
         destName: newDestname,
         destLoc: newDestLoc,
-        destArr: newDestArr,
-        destDept: newDestDept,
+        destArr: (newDestArry + '-' + newDestArrm + '-' + newDestArrd + 'T13:00:00'),
+        destDept: (newDestDepty + '-' + newDestDeptm + '-' + newDestDeptd + 'T13:00:00'),
         destComm: newDestComm,
         destcreated: time
       })
@@ -103,6 +109,38 @@ if(user_password === confirm_password){
       $('#' + whichtrip).hide()
     }
 
+// Map Functions
+  // function initMap() {
+  //   var map = new google.maps.Map(document.getElementById('map'), {
+  //     zoom: 12,
+  //     center: {lat: 37.7936684, lng: -122.3957547}
+  //   });
+  //   geocoder = new google.maps.Geocoder();
+  //   if (page === "index"){
+  //     document.getElementById('submit').addEventListener('click', function() {
+  //       geocodeAddress(geocoder, map);
+  //     });
+  //   }
+  // }
+
+  // window.initMap = initMap;
+
+  // function geocodeAddress(geocoder, resultsMap) {
+  //   var address = tempaddress
+  //   debugger;
+  //   geocoder.geocode({'address': address}, function(results, status) {
+  //     debugger;
+  //     if (status === 'OK') {
+  //       resultsMap.setCenter(results[0].geometry.location);
+  //       var marker = new google.maps.Marker({
+  //         map: resultsMap,
+  //         position: results[0].geometry.location
+  //       });
+  //     } else {
+  //       alert('Geocode was not successful for the following reason: ' + status);
+  //     }
+  //   });
+  // }
 
 // Modal Functionality
   //New User
@@ -116,6 +154,7 @@ if(user_password === confirm_password){
       $('#newtripmodal').hide()
       $('#newusermodal').hide()
       $('#newdestmodal').hide()
+      $('#mapmodal').hide()
     })
 
   //New Trip
@@ -138,11 +177,13 @@ if(user_password === confirm_password){
   //Check Map
     function showcheck(){
       // modal.show()
-      var mapslocation = $(this).context.previousSibling.innerText
-      var mapsarrive = $(this).context.previousSibling.previousElementSibling.previousSibling.innerText
-      var mapsdepart = $(this).context.previousSibling.previousElementSibling.innerText
+      var mapslocation = ($(this).context.previousSibling.innerText)
+      var mapsarrive = ($(this).context.previousSibling.previousElementSibling.previousSibling.innerText + 'T13:00:00')
+      var mapsdepart = ($(this).context.previousSibling.previousElementSibling.innerText + 'T13:00:00')
       // Get and add Lat/Long
       evBriteLookUp(mapsarrive, mapsdepart, mapslocation, $(this))
+      // google.maps.event.trigger(map, 'resize')
+      // initMap()
     }
 
 // Firebase Listeners
@@ -151,14 +192,18 @@ if(user_password === confirm_password){
     if (user) {
       console.log("---------auth state change-----------");
       userid = user.uid
-      localStorage.setItem("userid", user.uid)
-      $('.loginbutton').hide()
+      sessionStorage.setItem("userid", user.uid)
+      $('.newusersignup').hide()
+      $('.returninguserlogin').hide()
     }
+    // if (page === "index"){
+    //   initMap()
+    // }
   });
 
 // My Trips
   $(document).on('ready', function(){
-    userid = localStorage.getItem('userid')
+    userid = sessionStorage.getItem('userid')
     if(page === "mytrips"){
       var tripsref = database.ref('users/' + userid + '/trips').orderByChild("created")
       console.log('On mytrips page')
@@ -196,12 +241,15 @@ if(user_password === confirm_password){
             .addClass("opennewdest")
             .appendTo($('#destlist' + tripnum))
           var desttemp = value.dests
+          console.log(desttemp)
           desttemp = $.map( desttemp, function(key){
+            console.log(key)
             var destnum = $('.destdrop' + tripnum)["0"].children.length
             var dname = key.destName
             var dcomm = key.destComm
-            var darr = key.destArr
-            var ddept = key.destDept
+            var darr = ((key.destArr).substring(0, 10))
+            var ddept = ((key.destDept).substring(0, 10))
+            debugger;
             var dloc = key.destLoc
             var destframe = $('<div class="destframe" id="destframe' + destnum + '-' + tripnum + '">')
             var destname = $('<div class="destname">')
@@ -255,16 +303,22 @@ if(user_password === confirm_password){
           'start_date.range_start': arrive,
           'start_date.range_end': dept,
           'include_all_series_instances': false,
-          'include_unavailable_events': false
+          'include_unavailable_events': false,
         }
       }).done(function(response){
         if (response.events.length === 0){
           console.log('no results')
           $(thisbutton).text("Sorry, no shows available for those dates!")
         } else {
+          initMap()
+          eventmap = $('#map')
           console.log('some results')
-          debugger;
-          tempid = response.events[0].venue_id
+          for ( var i = 0; i < 5; i++){
+            tempid = response.events[i].venue_id
+            function makeMarkers (tempid) {
+
+            }
+            console.log(tempid)
             $.ajax({
               url: 'https://www.eventbriteapi.com/v3/venues/' + tempid + '/',
               method: 'GET',
@@ -273,23 +327,20 @@ if(user_password === confirm_password){
               }
             }).done(function(response){
               debugger;
-              var tempaddress = response.address.localized_address_display
+              tempaddress = response.address.localized_address_display
               var tempname = response.name
-              // function geocodeAddress(geocoder, resultsMap) {
-              //   var address = document.getElementById('address').value;
-              //   geocoder.geocode({'address': tempaddress}, function(results, status) {
-              //     if (status === 'OK') {
-              //       resultsMap.setCenter(results[0].geometry.location);
-              //       var marker = new google.maps.Marker({
-              //         map: resultsMap,
-              //         position: results[0].geometry.location
-              //       });
-              //     } else {
-              //       alert('Geocode was not successful for the following reason: ' + status);
-              //     }
-              //   });
-              // }
+              var templat = Number(response.latitude)
+              var templong = Number(response.longitude)
+              $('#mapmodal').show()
+              google.maps.event.trigger(map, 'resize')
+              map.setCenter({lat: templat, lng: templong})
+              // geocodeAddress(tempaddress, map)
+              var marker = new google.maps.Marker({
+                map: map,
+                position:{lat: templat, lng: templong}
+              })
             })
+          }
         }
       })
     }
@@ -308,27 +359,27 @@ if(user_password === confirm_password){
   // $(document).on('click', '#logout', )
 
   // Returning User Login
-  //   function returningusersubmit(){
-  //     var returninguserEmail = $('#returninguseremail').val().trim()
-  //     var returninguserPassword = $('#newuserpw').val().trim()
-  //     var confirmPassword = $('#returninguserpw').val().trim()
-  //       if(returninguserPassword === returninguserPassword){
-  //   firebase.auth().signInWithEmailAndPassword(email, password)
-  //       .catch(function(error) {
-  //     // Handle Errors here.
-  //     var errorCode = error.code;
-  //     var errorMessage = error.message;
-  //     if (errorCode === 'auth/wrong-password') {
-  //       alert('Wrong password.');
-  //     } else {
-  //       alert(errorMessage);
-  //     }
-  //     console.log(error);
-  //   });
+    function returningusersubmit(){
+      var returninguserEmail = $('#returninguseremail').val().trim()
+      var returninguserPassword = $('#returninguserpw').val().trim()
+        firebase.auth().signInWithEmailAndPassword(returninguserEmail, returninguserPassword).catch(function(error){
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+            console.log(error);
+          }
+        })
+      $('#returningusermodal').hide()
+    };
 
-  //   Sign Out
-  //   firebase.auth().signOut().then(function() {
-  //     console.log('Signed Out');
-  //   }, .catch(function(error) {
-  //     console.error('Sign Out Error', error);
-  //   });
+    // // Sign Out
+    // firebase.auth().signOut().then(function() {
+    //   console.log('Signed Out');
+    // }).catch(function(error) {
+    //   console.error('Sign Out Error', error);
+    // });
+

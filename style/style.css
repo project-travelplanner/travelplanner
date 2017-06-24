@@ -8,7 +8,6 @@
     color: #2B2D42;
   }
 
-
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
 
@@ -204,7 +203,7 @@ label{
 
 /*Trip Page*/
   .tripcontainer {
-    position: fixed;
+    position: absolute;
     width: 80%;
     top: 20%;
     left: 9%;
@@ -352,10 +351,27 @@ label{
   color: #EDF2F4;
   font-family: 'Crushed', cursive;
 }
+/*New Dest Modal*/
+.destday{
+  width: 15%;
+}
+.destmonth{
+  width: 15%;
+}
+.destyear{
+  width: 25%;
+}
 
+
+
+#mapmodal{
+  position: fixed;
+  margin-top: -135px;
+  z-index: 3;
+  margin-left: -30px;
+  width: 520px;
+}
 #map {
-  
   height: 400px;
-  width: 60%;
-
+  width: 100%;
 }
