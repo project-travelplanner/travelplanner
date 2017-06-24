@@ -351,6 +351,18 @@ label{
   color: #EDF2F4;
   font-family: 'Crushed', cursive;
 }
+/*New Dest Modal*/
+.destday{
+  width: 15%;
+}
+.destmonth{
+  width: 15%;
+}
+.destyear{
+  width: 25%;
+}
+
+
 
 #mapmodal{
   position: fixed;

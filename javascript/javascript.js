@@ -52,8 +52,12 @@ if(user_password === confirm_password){
       var tripName = $(this)["0"].offsetParent.offsetParent.attributes[2].value
       var newDestname = $('#newdestname').val().trim()
       var newDestLoc = $('#newdestloc').val().trim()
-      var newDestArr = $('#newdestarr').val().trim()
-      var newDestDept = $('#newdestdept').val().trim()
+      var newDestArry = $('#newdestarry').val().trim()
+      var newDestArrm = $('#newdestarrm').val().trim()
+      var newDestArrd = $('#newdestarrd').val().trim()
+      var newDestDepty = $('#newdestdepty').val().trim()
+      var newDestDeptm = $('#newdestdeptm').val().trim()
+      var newDestDeptd = $('#newdestdeptd').val().trim()
       var newDestComm = $('#newdestcomm').val().trim()
       var currentTripCounter
       database.ref('users/' + userid + '/trips/' + tripName).once('value').then(function(snapshot){
@@ -62,8 +66,8 @@ if(user_password === confirm_password){
       database.ref('users/' + userid + '/trips/' + tripName + '/dests/' + newDestname).set({
         destName: newDestname,
         destLoc: newDestLoc,
-        destArr: newDestArr,
-        destDept: newDestDept,
+        destArr: (newDestArry + '-' + newDestArrm + '-' + newDestArrd + 'T13:00:00'),
+        destDept: (newDestDepty + '-' + newDestDeptm + '-' + newDestDeptd + 'T13:00:00'),
         destComm: newDestComm,
         destcreated: time
       })
@@ -173,12 +177,12 @@ if(user_password === confirm_password){
   //Check Map
     function showcheck(){
       // modal.show()
-      var mapslocation = $(this).context.previousSibling.innerText
-      var mapsarrive = $(this).context.previousSibling.previousElementSibling.previousSibling.innerText
-      var mapsdepart = $(this).context.previousSibling.previousElementSibling.innerText
+      var mapslocation = ($(this).context.previousSibling.innerText)
+      var mapsarrive = ($(this).context.previousSibling.previousElementSibling.previousSibling.innerText + 'T13:00:00')
+      var mapsdepart = ($(this).context.previousSibling.previousElementSibling.innerText + 'T13:00:00')
       // Get and add Lat/Long
       evBriteLookUp(mapsarrive, mapsdepart, mapslocation, $(this))
-      google.maps.event.trigger(map, 'resize')
+      // google.maps.event.trigger(map, 'resize')
       // initMap()
     }
 
@@ -242,8 +246,9 @@ if(user_password === confirm_password){
             var destnum = $('.destdrop' + tripnum)["0"].children.length
             var dname = key.destName
             var dcomm = key.destComm
-            var darr = key.destArr
-            var ddept = key.destDept
+            var darr = ((key.destArr).substring(0, 10))
+            var ddept = ((key.destDept).substring(0, 10))
+            debugger;
             var dloc = key.destLoc
             var destframe = $('<div class="destframe" id="destframe' + destnum + '-' + tripnum + '">')
             var destname = $('<div class="destname">')
