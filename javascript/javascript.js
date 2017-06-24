@@ -102,6 +102,39 @@ if(user_password === confirm_password){
       $('#returningusermodal').hide()
     })
 
+
+  // Sign Out
+    function signout (){
+      console.log('Attempting sign out...')
+      firebase.auth().signOut()
+        .then(function() {
+          sessionStorage.userid = ''
+          userid = ''
+          console.log('Signed Out')
+        })
+        .catch(function(error) {
+          console.error('Sign Out Error', error)
+        })
+    }
+
+  // Returning User Login
+    function returningusersubmit(){
+      var returninguserEmail = $('#returninguseremail').val().trim()
+      var returninguserPassword = $('#returninguserpw').val().trim()
+        firebase.auth().signInWithEmailAndPassword(returninguserEmail, returninguserPassword).catch(function(error){
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+            console.log(error);
+          }
+        })
+      $('#returningusermodal').hide()
+    };
+
   // Close Trip Box
     function closetrip(){
       debugger;
@@ -301,7 +334,6 @@ if(user_password === confirm_password){
               $('#mapmodal').show()
               google.maps.event.trigger(map, 'resize')
               map.setCenter({lat: templat, lng: templong})
-              // geocodeAddress(tempaddress, map)
               var marker = new google.maps.Marker({
                 map: map,
                 position:{lat: templat, lng: templong}
@@ -323,30 +355,4 @@ if(user_password === confirm_password){
   $(document).on('click', '.opennewdest', ndmodal);
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
-  // $(document).on('click', '#logout', )
-
-  // Returning User Login
-    function returningusersubmit(){
-      var returninguserEmail = $('#returninguseremail').val().trim()
-      var returninguserPassword = $('#returninguserpw').val().trim()
-        firebase.auth().signInWithEmailAndPassword(returninguserEmail, returninguserPassword).catch(function(error){
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password.');
-          } else {
-            alert(errorMessage);
-            console.log(error);
-          }
-        })
-      $('#returningusermodal').hide()
-    };
-
-    // // Sign Out
-    // firebase.auth().signOut().then(function() {
-    //   console.log('Signed Out');
-    // }).catch(function(error) {
-    //   console.error('Sign Out Error', error);
-    // });
-
+  $(document).on('click', '#logout', signout)
