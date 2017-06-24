@@ -210,6 +210,7 @@ label{
     background-color: #2B2D42;
     padding: 15px;
     border-radius: 5px;
+    margin-bottom: 25px;
   }
   .tripitem{
     height: 10%;
@@ -374,4 +375,8 @@ label{
 #map {
   height: 400px;
   width: 100%;
+}
+
+#logout:hover {
+  cursor: pointer;
 }
