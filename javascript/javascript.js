@@ -193,7 +193,8 @@ if(user_password === confirm_password){
       console.log("---------auth state change-----------");
       userid = user.uid
       sessionStorage.setItem("userid", user.uid)
-      $('.loginbutton').hide()
+      $('.newusersignup').hide()
+      $('.returninguserlogin').hide()
     }
     // if (page === "index"){
     //   initMap()
