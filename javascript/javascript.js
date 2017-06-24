@@ -102,45 +102,45 @@ if(user_password === confirm_password){
       $('#returningusermodal').hide()
     })
 
+
+  // Sign Out
+    function signout (){
+      console.log('Attempting sign out...')
+      firebase.auth().signOut()
+        .then(function() {
+          sessionStorage.userid = ''
+          userid = ''
+          console.log('Signed Out')
+        })
+        .catch(function(error) {
+          console.error('Sign Out Error', error)
+        })
+    }
+
+  // Returning User Login
+    function returningusersubmit(){
+      var returninguserEmail = $('#returninguseremail').val().trim()
+      var returninguserPassword = $('#returninguserpw').val().trim()
+        firebase.auth().signInWithEmailAndPassword(returninguserEmail, returninguserPassword).catch(function(error){
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+            console.log(error);
+          }
+        })
+      $('#returningusermodal').hide()
+    };
+
   // Close Trip Box
     function closetrip(){
       debugger;
       var whichtrip = $(this).attr("data-num")
       $('#' + whichtrip).hide()
     }
-
-// Map Functions
-  // function initMap() {
-  //   var map = new google.maps.Map(document.getElementById('map'), {
-  //     zoom: 12,
-  //     center: {lat: 37.7936684, lng: -122.3957547}
-  //   });
-  //   geocoder = new google.maps.Geocoder();
-  //   if (page === "index"){
-  //     document.getElementById('submit').addEventListener('click', function() {
-  //       geocodeAddress(geocoder, map);
-  //     });
-  //   }
-  // }
-
-  // window.initMap = initMap;
-
-  // function geocodeAddress(geocoder, resultsMap) {
-  //   var address = tempaddress
-  //   debugger;
-  //   geocoder.geocode({'address': address}, function(results, status) {
-  //     debugger;
-  //     if (status === 'OK') {
-  //       resultsMap.setCenter(results[0].geometry.location);
-  //       var marker = new google.maps.Marker({
-  //         map: resultsMap,
-  //         position: results[0].geometry.location
-  //       });
-  //     } else {
-  //       alert('Geocode was not successful for the following reason: ' + status);
-  //     }
-  //   });
-  // }
 
 // Modal Functionality
   //New User
@@ -334,7 +334,6 @@ if(user_password === confirm_password){
               $('#mapmodal').show()
               google.maps.event.trigger(map, 'resize')
               map.setCenter({lat: templat, lng: templong})
-              // geocodeAddress(tempaddress, map)
               var marker = new google.maps.Marker({
                 map: map,
                 position:{lat: templat, lng: templong}
@@ -356,30 +355,4 @@ if(user_password === confirm_password){
   $(document).on('click', '.opennewdest', ndmodal);
   $(document).on('click', '#returningusersubmit', returningusersubmit);
   $(document).on('click', '.returninguserlogin', returninguserlogin);
-  // $(document).on('click', '#logout', )
-
-  // Returning User Login
-    function returningusersubmit(){
-      var returninguserEmail = $('#returninguseremail').val().trim()
-      var returninguserPassword = $('#returninguserpw').val().trim()
-        firebase.auth().signInWithEmailAndPassword(returninguserEmail, returninguserPassword).catch(function(error){
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password.');
-          } else {
-            alert(errorMessage);
-            console.log(error);
-          }
-        })
-      $('#returningusermodal').hide()
-    };
-
-    // // Sign Out
-    // firebase.auth().signOut().then(function() {
-    //   console.log('Signed Out');
-    // }).catch(function(error) {
-    //   console.error('Sign Out Error', error);
-    // });
-
+  $(document).on('click', '#logout', signout)
